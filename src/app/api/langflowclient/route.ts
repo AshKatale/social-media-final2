@@ -44,9 +44,9 @@ export async function POST(req: NextRequest) {
         outputType,
         tweaks,
         stream,
-        (data: { chunk: any }) => console.log("Received:", data.chunk), // onUpdate
+        (data: unknown ) => console.log("Received:", data), // onUpdate
         (message: string) => console.log("Stream Closed:", message), // onClose
-        (error: Error) => console.log("Stream Error:", error) // onError
+        (error : unknown) => console.log("Stream Error:", error) // onError
       );
       if (!stream && response && response.outputs) {
         const flowOutputs = response.outputs[0];
@@ -57,8 +57,8 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(textMessage);
       }
-    } catch (error : any) {
-      console.error("Main Error", error.message);
+    } catch (error : unknown) {
+      console.error("Main Error", error);
       return NextResponse.json(error)
     }
 
