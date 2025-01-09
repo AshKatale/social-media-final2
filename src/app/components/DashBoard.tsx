@@ -73,6 +73,8 @@ export default function DashBoard() {
   };
 
   const handleSubmit = async () => {
+    console.log(resData);
+    
     setLoading(true);
     try {
       const res = await axios.post("/api/langflowclient", {

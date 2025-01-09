@@ -8,7 +8,7 @@ export class LangflowClient {
     this.baseURL = baseURL;
     this.applicationToken = applicationToken;
   }
-  async post(endpoint: string, body: any, headers: Record<string, string> = { "Content-Type": "application/json" }) {
+  async post(endpoint: string, body: unknown, headers: Record<string, string> = { "Content-Type": "application/json" }) {
     headers["Authorization"] = `Bearer ${this.applicationToken}`;
     headers["Content-Type"] = "application/json";
     const url = `${this.baseURL}${endpoint}`;
@@ -43,7 +43,7 @@ export class LangflowClient {
     inputType: string = "chat",
     outputType: string = "chat",
     stream: boolean = false,
-    tweaks: Record<string, any> = {}
+    tweaks: Record<string, unknown> = {}
   ) {
     const endpoint = `/lf/${langflowId}/api/v1/run/${flowId}?stream=${stream}`;
     return this.post(endpoint, {
@@ -56,7 +56,7 @@ export class LangflowClient {
 
   handleStream(
     streamUrl: string,
-    onUpdate: (data: any) => void,
+    onUpdate: (data: unknown) => void,
     onClose: (message: string) => void,
     onError: (error: Event) => void
   ) {
@@ -87,11 +87,11 @@ export class LangflowClient {
     inputValue: string,
     inputType: string = "chat",
     outputType: string = "chat",
-    tweaks: Record<string, any> = {},
+    tweaks: Record<string, unknown> = {},
     stream: boolean = false,
-    onUpdate: (data: any) => void,
+    onUpdate: (data: unknown) => void,
     onClose: (message: string) => void,
-    onError: (error: any) => void
+    onError: (error: unknown) => void
   ) {
     try {
       const initResponse = await this.initiateSession(
