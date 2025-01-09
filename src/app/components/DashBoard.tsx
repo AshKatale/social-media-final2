@@ -107,29 +107,29 @@ export default function DashBoard() {
     }
   };
 
-  const extractVideoContentData = (data: string) => {
-    const regex =
-      /Educational content: (\d+\.\d+)% engagement rate|Entertainment content: (\d+\.\d+)% engagement rate|Promotional content: (\d+\.\d+)% engagement rate/g;
-    setChartData(
-      extractDataUsingRegex(data, regex, [
-        "Educational",
-        "Entertainment",
-        "Promotional",
-      ])
-    );
-  };
+  // const extractVideoContentData = (data: string) => {
+  //   const regex =
+  //     /Educational content: (\d+\.\d+)% engagement rate|Entertainment content: (\d+\.\d+)% engagement rate|Promotional content: (\d+\.\d+)% engagement rate/g;
+  //   setChartData(
+  //     extractDataUsingRegex(data, regex, [
+  //       "Educational",
+  //       "Entertainment",
+  //       "Promotional",
+  //     ])
+  //   );
+  // };
 
-  const extractImageContentData = (data: string) => {
-    const regex =
-      /Text-based images: (\d+\.\d+)% engagement rate|Visual images: (\d+\.\d+)% engagement rate|Interactive images: (\d+\.\d+)% engagement rate/g;
-    setChartData(
-      extractDataUsingRegex(data, regex, [
-        "Text-based",
-        "Visual",
-        "Interactive",
-      ])
-    );
-  };
+  // const extractImageContentData = (data: string) => {
+  //   const regex =
+  //     /Text-based images: (\d+\.\d+)% engagement rate|Visual images: (\d+\.\d+)% engagement rate|Interactive images: (\d+\.\d+)% engagement rate/g;
+  //   setChartData(
+  //     extractDataUsingRegex(data, regex, [
+  //       "Text-based",
+  //       "Visual",
+  //       "Interactive",
+  //     ])
+  //   );
+  // };
 
   const extractDataUsingRegexBar = (
     data: string,
