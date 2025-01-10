@@ -1,5 +1,6 @@
 "use client";
 
+
 import axios from "axios";
 import React, { useState } from "react";
 import {
@@ -20,9 +21,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/Select";
-import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
+import { DollarSign, Users, CreditCard, Activity, MessageCircle } from "lucide-react";
 import { Button } from "./Button";
 import Loader from "./Loader";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../components/ui/dialog";
+
+import { Textarea } from "../components/ui/textarea";
 
 const COLORS = ["#3b82f6", "#ec4899", "#f97316", "#a855f7", "#10b981"];
 
@@ -43,6 +55,27 @@ export default function DashBoard() {
   const [totalInteractions, setTotalInteractions] = useState("N/A");
   const [completionRate, setCompletionRate] = useState("N/A");
   const [swipeThroughRate, setSwipeThroughRate] = useState("N/A");
+
+  const [chatInput, setChatInput] = useState("");
+  const [chatResponse, setChatResponse] = useState("How may I help you?");
+
+  const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
+
+  function formatString(input: string): string {
+    // Replace '\n' with actual line breaks
+    return input.split('\n').join('\n');
+}
+
+  const handleChatSubmit = async () => {
+    setIsGeneratingResponse(true);
+    const res = await axios.post("/api/langflowclient", { inputValue : chatInput});
+
+    // const data = JSON.stringify(res.data);
+    setChatResponse(formatString(res.data));
+    // For now, using a placeholder response
+    setChatInput("");
+    setIsGeneratingResponse(false);
+  };
 
   const extractMetrics = (data: string) => {
     // Extract metrics from the response text
@@ -251,9 +284,13 @@ export default function DashBoard() {
     );
   };
 
+  const resetChat = ()=>{
+    setChatResponse("Your Response will appear here...")
+  }
+
   return (
     <div>
-      <div className={`min-h-screen bg-zinc-950 text-white p-8 `}>
+      <div className={`min-h-screen bg-zinc-950 text-white p-12 `}>
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
             <div className="flex flex-col items-center gap-4">
@@ -312,11 +349,41 @@ export default function DashBoard() {
             >
               Generate Analysis
             </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button onClick={resetChat} className="p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all ease-in-out duration-300">
+                  <MessageCircle className="h-5 w-5" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="w-[100%] h-[70%] bg-zinc-900 text-white">
+                <DialogHeader>
+                  <DialogTitle>Chat with AI Assistant</DialogTitle>
+                  <DialogDescription className="text-gray-400">
+                    Ask questions about your content performance
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex flex-col gap-4">
+                  <div className="h-[250px] overflow-y-auto p-4 bg-zinc-800 rounded-lg">
+                    <p className="text-gray-200">{chatResponse}</p>
+                  </div>
+                    <Textarea
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder="Ask a question..."
+                      className="flex-1 bg-zinc-800 border-gray-700 text-white min-h-[60px] max-h-[120px] resize-y"
+                    />
+                    <Button onClick={handleChatSubmit} className={`bg-blue-600 hover:bg-blue-700 ${isGeneratingResponse ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                      {isGeneratingResponse ? "Gererating Response" : "Send"}
+                    </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
           </div>
 
           {/* {input} */}
 
-          <h1 className="text-3xl font-bold">Analytics Report</h1>
+          <h1 className="text-3xl font-bold p-5">Analytics Report</h1>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -363,7 +430,7 @@ export default function DashBoard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Overview Chart */}
 
-            <div className="bg-zinc-900 p-6 rounded-lg">
+            <div className="bg-zinc-900 p-6 rounded-lg mt-5">
               <h3 className="text-lg font-medium mb-4">
                 Content Engagement Rates
               </h3>
@@ -380,7 +447,7 @@ export default function DashBoard() {
             </div>
 
             {/* Recent Sales */}
-            <div className="bg-zinc-900 p-6 rounded-lg">
+            <div className="bg-zinc-900 p-6 rounded-lg mt-5">
               <h3 className="text-lg font-medium mb-4">Recommendations</h3>
               <div className="space-y-4">
                 <ul className="list-disc pl-6">
@@ -439,6 +506,5 @@ export default function DashBoard() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
