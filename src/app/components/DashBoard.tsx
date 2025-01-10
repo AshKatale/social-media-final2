@@ -1,6 +1,5 @@
 "use client";
 
-
 import axios from "axios";
 import React, { useState } from "react";
 import {
@@ -21,7 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/Select";
-import { DollarSign, Users, CreditCard, Activity, MessageCircle } from "lucide-react";
+import {
+  DollarSign,
+  Users,
+  CreditCard,
+  Activity,
+  MessageCircle,
+} from "lucide-react";
 import { Button } from "./Button";
 import Loader from "./Loader";
 
@@ -63,12 +68,14 @@ export default function DashBoard() {
 
   function formatString(input: string): string {
     // Replace '\n' with actual line breaks
-    return input.split('\n').join('\n');
-}
+    return input.split("\n").join("\n");
+  }
 
   const handleChatSubmit = async () => {
     setIsGeneratingResponse(true);
-    const res = await axios.post("/api/langflowclient", { inputValue : chatInput});
+    const res = await axios.post("/api/langflowclient", {
+      inputValue: chatInput,
+    });
 
     // const data = JSON.stringify(res.data);
     setChatResponse(formatString(res.data));
@@ -107,7 +114,7 @@ export default function DashBoard() {
 
   const handleSubmit = async () => {
     console.log(resData);
-    
+
     setLoading(true);
     try {
       const res = await axios.post("/api/langflowclient", {
@@ -284,9 +291,9 @@ export default function DashBoard() {
     );
   };
 
-  const resetChat = ()=>{
-    setChatResponse("Your Response will appear here...")
-  }
+  const resetChat = () => {
+    setChatResponse("Your Response will appear here...");
+  };
 
   return (
     <div>
@@ -351,9 +358,15 @@ export default function DashBoard() {
             </Button>
             <Dialog>
               <DialogTrigger asChild>
-                <Button onClick={resetChat} className="p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all ease-in-out duration-300">
+                <div className="flex justify-end w-[30%] space-x-4">
+                <Button
+                  onClick={resetChat}
+                  className="p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all ease-in-out duration-300"
+                >
                   <MessageCircle className="h-5 w-5" />
+                  <p>Chat with AI</p>
                 </Button>
+                </div>
               </DialogTrigger>
               <DialogContent className="w-[100%] h-[70%] bg-zinc-900 text-white">
                 <DialogHeader>
@@ -366,145 +379,147 @@ export default function DashBoard() {
                   <div className="h-[250px] overflow-y-auto p-4 bg-zinc-800 rounded-lg">
                     <p className="text-gray-200">{chatResponse}</p>
                   </div>
-                    <Textarea
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      placeholder="Ask a question..."
-                      className="flex-1 bg-zinc-800 border-gray-700 text-white min-h-[60px] max-h-[120px] resize-y"
-                    />
-                    <Button onClick={handleChatSubmit} className={`bg-blue-600 hover:bg-blue-700 ${isGeneratingResponse ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                      {isGeneratingResponse ? "Gererating Response" : "Send"}
-                    </Button>
+                  <Textarea
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Ask a question..."
+                    className="flex-1 bg-zinc-800 border-gray-700 text-white min-h-[60px] max-h-[120px] resize-y"
+                  />
+                  <Button
+                    onClick={handleChatSubmit}
+                    className={`bg-blue-600 hover:bg-blue-700 ${
+                      isGeneratingResponse
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                  >
+                    {isGeneratingResponse ? "Gererating Response" : "Send"}
+                  </Button>
                 </div>
               </DialogContent>
             </Dialog>
           </div>
-          </div>
+        </div>
 
-          {/* {input} */}
+        {/* {input} */}
 
-          <h1 className="text-3xl font-bold p-5">Analytics Report</h1>
+        <h1 className="text-3xl font-bold p-5">Analytics Report</h1>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-zinc-900 p-6 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-                <h3 className="text-sm font-medium">Average Engagement Rate</h3>
-              </div>
-              <div className="mt-2">
-                <div className="text-2xl font-bold">
-                  {averageEngagementRate}%
-                </div>
-              </div>
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-zinc-900 p-6 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <h3 className="text-sm font-medium">Average Engagement Rate</h3>
             </div>
-            <div className="bg-zinc-900 p-6 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                <h3 className="text-sm font-medium">Total Interactions</h3>
-              </div>
-              <div className="mt-2">
-                <div className="text-2xl font-bold">{totalInteractions}</div>
-              </div>
-            </div>
-            <div className="bg-zinc-900 p-6 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-                <h3 className="text-sm font-medium">Completion Rate</h3>
-              </div>
-              <div className="mt-2">
-                <div className="text-2xl font-bold">{completionRate}%</div>
-              </div>
-            </div>
-            <div className="bg-zinc-900 p-6 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <Activity className="h-4 w-4 text-muted-foreground" />
-                <h3 className="text-sm font-medium">Swipe-through Rate</h3>
-              </div>
-              <div className="mt-2">
-                <div className="text-2xl font-bold">{swipeThroughRate}%</div>
-              </div>
+            <div className="mt-2">
+              <div className="text-2xl font-bold">{averageEngagementRate}%</div>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Overview Chart */}
-
-            <div className="bg-zinc-900 p-6 rounded-lg mt-5">
-              <h3 className="text-lg font-medium mb-4">
-                Content Engagement Rates
-              </h3>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                    <XAxis dataKey="name" stroke="#888" />
-                    <YAxis stroke="#888" />
-                    <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+          <div className="bg-zinc-900 p-6 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              <h3 className="text-sm font-medium">Total Interactions</h3>
             </div>
-
-            {/* Recent Sales */}
-            <div className="bg-zinc-900 p-6 rounded-lg mt-5">
-              <h3 className="text-lg font-medium mb-4">Recommendations</h3>
-              <div className="space-y-4">
-                <ul className="list-disc pl-6">
-                  {recommendations.map((rec, index) => (
-                    <li key={index}>{rec}</li>
-                  ))}
-                </ul>
-              </div>
+            <div className="mt-2">
+              <div className="text-2xl font-bold">{totalInteractions}</div>
             </div>
+          </div>
+          <div className="bg-zinc-900 p-6 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <h3 className="text-sm font-medium">Completion Rate</h3>
+            </div>
+            <div className="mt-2">
+              <div className="text-2xl font-bold">{completionRate}%</div>
+            </div>
+          </div>
+          <div className="bg-zinc-900 p-6 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <Activity className="h-4 w-4 text-muted-foreground" />
+              <h3 className="text-sm font-medium">Swipe-through Rate</h3>
+            </div>
+            <div className="mt-2">
+              <div className="text-2xl font-bold">{swipeThroughRate}%</div>
+            </div>
+          </div>
+        </div>
 
-            {/* Browser Distribution */}
-            <div className="bg-zinc-900 p-6 rounded-lg">
-              <h3 className="text-lg font-medium mb-4">
-                Engagement Rate Distribution
-              </h3>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={browserData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {browserData.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="mt-4 space-y-2">
-                {browserData.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: COLORS[index] }}
-                      />
-                      <span className="text-sm">{item.name}</span>
-                    </div>
-                    <span className="text-sm font-medium">{item.value}%</span>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Overview Chart */}
+
+          <div className="bg-zinc-900 p-6 rounded-lg mt-5">
+            <h3 className="text-lg font-medium mb-4">
+              Content Engagement Rates
+            </h3>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="name" stroke="#888" />
+                  <YAxis stroke="#888" />
+                  <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Recent Sales */}
+          <div className="bg-zinc-900 p-6 rounded-lg mt-5">
+            <h3 className="text-lg font-medium mb-4">Recommendations</h3>
+            <div className="space-y-4">
+              <ul className="list-disc pl-6">
+                {recommendations.map((rec, index) => (
+                  <li key={index}>{rec}</li>
                 ))}
-              </div>
+              </ul>
+            </div>
+          </div>
+
+          {/* Browser Distribution */}
+          <div className="bg-zinc-900 p-6 rounded-lg">
+            <h3 className="text-lg font-medium mb-4">
+              Engagement Rate Distribution
+            </h3>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={browserData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {browserData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-4 space-y-2">
+              {browserData.map((item, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: COLORS[index] }}
+                    />
+                    <span className="text-sm">{item.name}</span>
+                  </div>
+                  <span className="text-sm font-medium">{item.value}%</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }
